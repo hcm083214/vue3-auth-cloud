@@ -20,7 +20,7 @@
         <common-table :tableList="tableData.i18nList" :isLoading="tableData.isLoading"
             :tableHeaderConfig="tableData.headerConfig" :uploadRequestConfig="tableData.uploadRequestConfig"
             @handleEvent="tableHandler" />
-        <Pagination :total="pagination.total" :size="pagination.size" :currentPage="pagination.current"
+        <Pagination v-bind = "pagination"
             @sizeChange="sizeChange" @currentPageChange="currentPageChange" />
         <el-dialog v-model="dialogConfig.isVisible" :title="dialogConfig.title" width="50%" top="100px"
             :close-on-click-modal="false" destroy-on-close draggable>
@@ -37,12 +37,13 @@ import CommonTable from "@/components/CommonTable.vue";
 import { TableOperationMode, TableHandlerOption } from "@/components/CommonTable";
 import Pagination from "@/components/Pagination.vue";
 import { I18nData } from "@/api/types";
-import { getIl8nListApi, searchI18nListParams,i18nParams } from "@/api/config";
+import { getIl8nListApi, searchI18nListParams,i18nParams } from "@/api/i18n";
 import { $t, SUPPORT_LOCALES as locales } from "@/utils/i18n";
 import { getToken } from "@/utils/token";
 import I18nConfig from "./I18nConfig.vue";
 
 async function getI18nData(params: searchI18nListParams) {
+    console.log("🚀 ~ getI18nData ~ params:", params)
     tableData.isLoading = true;
     const result = await getIl8nListApi(params);
     if (result.code === 200) {
@@ -175,4 +176,4 @@ function currentPageChange(current: number) {
     margin-bottom: 10px;
     margin-right: 50px;
 }
-</style>
+</style>@/api/i18n

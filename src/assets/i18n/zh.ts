@@ -90,6 +90,9 @@ const zh_CN ={
         resourceTypePlaceholder:'请输入资源类型',
         resourceTypeMenuPlaceholder:'资源类型选菜单此项必填',
         pathPlaceholder:'请输入资源路径',
+    },
+    system:{
+        i18nId: '国际化编号',
     }
 }
 export default zh_CN;

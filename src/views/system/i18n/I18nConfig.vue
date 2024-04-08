@@ -32,7 +32,7 @@ import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from "element-plus";
 
 import { $t, SUPPORT_LOCALES as locales } from "@/utils/i18n";
-import { addIl8nListApi, editIl8nListApi } from "@/api/config"
+import { addIl8nListApi, editIl8nListApi } from "@/api/i18n"
 import { I18nData } from "@/api/types";
 import { TableOperationMode } from "@/components/CommonTable";
 
@@ -82,7 +82,7 @@ async function handleClick(formEl: FormInstance | undefined, mode: TableOperatio
     if (mode === "Add") {
         result = await addIl8nListApi(objToArr(i18nForm))
     } else if (mode === "Edit") {
-        result = await editIl8nListApi(i18nForm.i18nId,{
+        result = await editIl8nListApi({
                 i18nId: i18nForm.i18nId,
                 i18nModule: i18nForm.i18nModule,
                 i18nKey: i18nForm.i18nKey,

@@ -1,7 +1,7 @@
 import { createI18n } from "vue-i18n";
 import { nextTick } from 'vue'
 
-import { getIl8nPackageApi } from "@/api/config";
+import { getIl8nPackageApi } from "@/api/i18n";
 import { I18nData } from "@/api/types";
 import zh_CN from "@/assets/i18n/zh";
 import { isEmptyObj } from "@/utils/index";

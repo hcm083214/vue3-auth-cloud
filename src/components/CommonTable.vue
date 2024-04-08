@@ -21,9 +21,9 @@
             </el-col>
 
             <el-col :span="1.5">
-                <el-upload v-model:file-list="fileList" class="upload-demo" method="post" :on-success="handleUploadSuccess"
-                    :on-error="handleUploadError" :show-file-list="false" :action="uploadRequestConfig.uploadUrl"
-                    :headers="uploadRequestConfig.headers">
+                <el-upload v-model:file-list="fileList" class="upload-demo" method="post"
+                    :on-success="handleUploadSuccess" :on-error="handleUploadError" :show-file-list="false"
+                    :action="uploadRequestConfig.uploadUrl" :headers="uploadRequestConfig.headers">
                     <el-button type="success" plain>
                         <icon icon="svg-icon:import" />
                         {{ $t('common.import') }}
@@ -35,13 +35,15 @@
             <el-table-column type="selection" width="55" align="center" />
             <template v-for="rows in props.tableHeaderConfig" :key="rows.label">
 
-                <el-table-column :label="rows.label" align="center" :width="rows.width" v-if="rows.label == $t('common.status')">
+                <el-table-column :label="rows.label" align="center" :width="rows.width"
+                    v-if="rows.label == $t('common.status')">
                     <template #default="scope">
                         <el-switch active-value="1" inactive-value="0" v-model="scope.row.status"
                             @change="handleEdit(scope.row, true)"></el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column :label="rows.label" align="center" :width="rows.width" v-else-if="rows.label === $t('permission.functionList')">
+                <el-table-column :label="rows.label" align="center" :width="rows.width"
+                    v-else-if="rows.label === $t('permission.functionList')">
                     <template #default="scope">
                         <span>{{ getFunctionListString(scope.row) }}</span>
                     </template>
@@ -54,7 +56,8 @@
                 </el-table-column>
                 <el-table-column :label="rows.label" :prop="rows.prop" :width="rows.width" v-else />
             </template>
-            <el-table-column :label="$t('common.operation')" align="center" class-name="small-padding fixed-width" fixed="right" min-width="120">
+            <el-table-column :label="$t('common.operation')" align="center" class-name="small-padding fixed-width"
+                fixed="right" min-width="120">
                 <template #default="scope">
                     <el-button size="small" link type="primary" @click="handleEdit(scope.row)">
                         <icon icon="svg-icon:edit" />{{ $t('common.edit') }}
@@ -69,14 +72,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { UploadUserFile, FormInstance } from 'element-plus'
+import { ref, PropType } from "vue";
+import type { UploadUserFile } from 'element-plus'
 import { ElMessage } from 'element-plus';
 
 import { dataFormat } from "@/utils/index";
 import Icon from "@/components/Icon.vue";
 import { FunctionList, RoleList } from "@/api/types";
-import { TableOperation } from "@/components/CommonTable";
+import { TableHandler, TableHandlerOption } from "@/components/CommonTable";
 import { $t } from "@/utils/i18n";
 
 const props = defineProps({
@@ -86,9 +89,10 @@ const props = defineProps({
     },
     tableList: {
         type: Array,
-        default: [],
+        default: () => ([]),
     },
     tableHeaderConfig: {
+        type: Object as PropType<TableHandler[]>,
         default: () => ([{
             label: '',
             prop: '',
@@ -107,13 +111,15 @@ const props = defineProps({
     }
 })
 const fileList = ref<UploadUserFile[]>();
-const emit = defineEmits(["handleEvent"])
+const emit = defineEmits<{
+    (e: "handleEvent", option: TableHandlerOption<any>): void;
+}>()
 const handleAdd = () => {
-    emit("handleEvent", { mode: TableOperation.Add })
+    emit("handleEvent", { mode: "Add" })
 }
 const handleExport = (exportType: 'template' | undefined) => {
     emit("handleEvent", {
-        mode: TableOperation.Export,
+        mode: "Export",
         option: {
             exportType
         }
@@ -121,7 +127,12 @@ const handleExport = (exportType: 'template' | undefined) => {
 }
 const getFunctionListString = (role: RoleList) => {
     if (!!role.functionList) {
-        return role.functionList.reduce((prev: string, next: FunctionList, index: number) => index == 0 ? prev + next.functionKey : prev + ',' + next.functionKey, "")
+        return role.functionList.reduce(
+            (prev: string, next: FunctionList, index: number) =>
+                index == 0 ?
+                    prev + next.functionKey :
+                    prev + ',' + next.functionKey,
+            "")
     } else {
         return ''
     }
@@ -148,7 +159,7 @@ const handleUploadError = (error: Error) => {
 
 const handleEdit = (row: any, isEditStatus = false) => {
     emit("handleEvent", {
-        mode: TableOperation.Edit,
+        mode: "Edit",
         option: {
             rowData: row,
             isEditStatus

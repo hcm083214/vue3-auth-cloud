@@ -31,7 +31,7 @@ export async function getIl8nListApi(params: searchI18nListParams) {
  * @return {*}
  */
 export async function addIl8nListApi(i18nData: I18nData[]) {
-    return await service.post<Page<I18nData>>(`/i18n`, {
+    return await service.post<String>(`/i18n/add`, {
         data: i18nData
     });
 }
@@ -41,12 +41,15 @@ export async function addIl8nListApi(i18nData: I18nData[]) {
  * @param {i18nParams} params
  * @return {*}
  */
-export async function editIl8nListApi(i18nId: Number, i18nData: I18nData) {
-    return await service.post<Page<I18nData>>(`/i18n/i18n_id/${i18nId}`, {
+export async function editIl8nListApi(i18nData: I18nData) {
+    return await service.post<String>(`/i18n/edit`, {
         data: i18nData
     });
 }
 
+export async function deleteIl8n(i18nId: Number) {
+    return await service.post<String>(`/i18n/i18n_id/${i18nId}`,{});
+}
 
 /**
  * @description: 得到整个语言环境所有的国际化数据

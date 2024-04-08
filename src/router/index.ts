@@ -17,7 +17,7 @@ const constantRoutes = [
     {
         path: '/i18n',
         name: 'i18n',
-        component: () => import('@/views/i18n/I18n.vue'),
+        component: () => import('@/views/system/i18n/I18n.vue'),
     },
 ];
 
