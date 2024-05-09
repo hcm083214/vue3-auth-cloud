@@ -20,12 +20,24 @@
         <common-table :tableList="tableData.i18nList" :isLoading="tableData.isLoading"
             :tableHeaderConfig="tableData.headerConfig" :uploadRequestConfig="tableData.uploadRequestConfig"
             @handleEvent="tableHandler" />
-        <Pagination v-bind = "pagination"
-            @sizeChange="sizeChange" @currentPageChange="currentPageChange" />
+        <Pagination v-bind="pagination" @sizeChange="sizeChange" @currentPageChange="currentPageChange" />
         <el-dialog v-model="dialogConfig.isVisible" :title="dialogConfig.title" width="50%" top="100px"
             :close-on-click-modal="false" destroy-on-close draggable>
             <i18n-config :i18nConfigData="dialogConfig.data" :mode="dialogConfig.mode" @handleConfig="handleConfig" />
         </el-dialog>
+        <co-table-operation :tableOperation='["Add", "Delete"]' @tableOperationHandler="tableOperationHandler">
+            <div>1111</div>
+        </co-table-operation>
+        <co-table :tableList="tableData.i18nList" :isLoading="tableData.isLoading"
+            :tableHeaderConfig="tableData.headerConfig"
+            :customizeTableHeaderConfig="tableData.customizeTableHeaderConfig">
+            <template #createTime="scope">
+                <span>1- {{ scope }}</span>
+            </template>
+            <template #updateBy="scope">
+                <span>{{ scope }}</span>
+            </template>
+        </co-table>
     </div>
 </template>
 
@@ -33,14 +45,24 @@
 import { onMounted, reactive, ref } from 'vue';
 import type { FormInstance } from 'element-plus'
 
+import CoTableOperation from "@/components/table/CoTableOperation.vue";
+import CoTable from "@/components/table/CoTable.vue";
+import { dataFormat } from "@/utils/index";
+
 import CommonTable from "@/components/CommonTable.vue";
 import { TableOperationMode, TableHandlerOption } from "@/components/CommonTable";
 import Pagination from "@/components/Pagination.vue";
 import { I18nData } from "@/api/types";
-import { getIl8nListApi, searchI18nListParams,i18nParams } from "@/api/i18n";
+import { getIl8nListApi, searchI18nListParams, i18nParams } from "@/api/i18n";
 import { $t, SUPPORT_LOCALES as locales } from "@/utils/i18n";
 import { getToken } from "@/utils/token";
 import I18nConfig from "./I18nConfig.vue";
+import { TableOperation } from "@/components/table/table";
+
+function tableOperationHandler(t: TableOperation) {
+    console.log(t);
+}
+
 
 async function getI18nData(params: searchI18nListParams) {
     console.log("🚀 ~ getI18nData ~ params:", params)
@@ -97,6 +119,28 @@ const tableData = reactive({
             label: $t('system.i18nValue'),
             prop: 'i18nValue',
             width: 250,
+        },
+    ],
+    customizeTableHeaderConfig: [
+        {
+            label: $t('common.createTime'),
+            prop: 'createTime',
+            width: 100,
+        },
+        {
+            label: $t('common.createBy'),
+            prop: 'createBy',
+            width: 100,
+        },
+        {
+            label: $t('common.updateTime'),
+            prop: 'updateTime',
+            width: 100,
+        },
+        {
+            label: $t('common.updateBy'),
+            prop: 'updateBy',
+            width: 100,
         },
     ],
     uploadRequestConfig: {
@@ -176,4 +220,4 @@ function currentPageChange(current: number) {
     margin-bottom: 10px;
     margin-right: 50px;
 }
-</style>@/api/i18n
+</style>

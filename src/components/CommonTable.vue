@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="common-table-wrapper">
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
                 <el-button type="primary" plain @click="handleAdd">
@@ -81,6 +81,7 @@ import Icon from "@/components/Icon.vue";
 import { FunctionList, RoleList } from "@/api/types";
 import { TableHandler, TableHandlerOption } from "@/components/CommonTable";
 import { $t } from "@/utils/i18n";
+import { computed } from "vue";
 
 const props = defineProps({
     isLoading: {
@@ -168,4 +169,8 @@ const handleEdit = (row: any, isEditStatus = false) => {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.common-table-wrapper{
+    padding: 5px 8px;
+}
+</style>

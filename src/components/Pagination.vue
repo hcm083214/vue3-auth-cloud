@@ -22,12 +22,12 @@ const props = defineProps({
 });
 const pageSizeInside = ref(props.size);
 const currentPageInside = ref(props.current);
-const emit = defineEmits(['pageSizeChange', 'currentPageChange'])
+const emit = defineEmits(['sizeChange', 'currentPageChange'])
 watch(currentPageInside, (currentPage) => {
     emit("currentPageChange", currentPage);
 });
 watch(pageSizeInside, (pageSize) => {
-    emit("pageSizeChange", pageSize);
+    emit("sizeChange", pageSize);
 })
 </script>
 
