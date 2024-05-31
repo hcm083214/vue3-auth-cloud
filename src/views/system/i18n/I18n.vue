@@ -3,7 +3,7 @@
         <el-form :model="queryParams" ref="queryForm" :inline="true">
             <el-form-item :label="$t('system.locale')" prop="locale" class="col2">
                 <el-select v-model="queryParams.locale" class="m-2" placeholder="Select">
-                    <el-option v-for="item in locales" :key="item" :label="item" :value="item" />
+                    <el-option v-for="item in SUPPORT_LOCALES_LIST" :key="item" :label="item" :value="item" />
                 </el-select>
             </el-form-item>
             <el-form-item :label="$t('system.i18nModule')" prop="i18nModule" class="col2">
@@ -17,27 +17,24 @@
             <el-button type="primary" @click="handleQuery">{{ $t('common.search') }}</el-button>
             <el-button @click="resetQuery(queryForm)">{{ $t('common.reset') }}</el-button>
         </div>
-        <common-table :tableList="tableData.i18nList" :isLoading="tableData.isLoading"
-            :tableHeaderConfig="tableData.headerConfig" :uploadRequestConfig="tableData.uploadRequestConfig"
-            @handleEvent="tableHandler" />
-        <Pagination v-bind="pagination" @sizeChange="sizeChange" @currentPageChange="currentPageChange" />
         <el-dialog v-model="dialogConfig.isVisible" :title="dialogConfig.title" width="50%" top="100px"
             :close-on-click-modal="false" destroy-on-close draggable>
             <i18n-config :i18nConfigData="dialogConfig.data" :mode="dialogConfig.mode" @handleConfig="handleConfig" />
         </el-dialog>
-        <co-table-operation :tableOperation='["Add", "Delete"]' @tableOperationHandler="tableOperationHandler">
-            <div>1111</div>
+        <co-table-operation :tableOperation='["Add", "Export", "Import"]'
+            @tableOperationHandler="tableOperationHandler">
         </co-table-operation>
         <co-table :tableList="tableData.i18nList" :isLoading="tableData.isLoading"
             :tableHeaderConfig="tableData.headerConfig"
-            :customizeTableHeaderConfig="tableData.customizeTableHeaderConfig">
-            <template #createTime="scope">
-                <span>1- {{ scope }}</span>
+            :customizeTableHeaderConfig="tableData.customizeTableHeaderConfig" @tableHandler="tableHandler">
+            <template #createTime="tableData">
+                <span>{{ dataFormat(tableData.createTime, "YYYY/MM/DD HH:mm:ss") }}</span>
             </template>
-            <template #updateBy="scope">
-                <span>{{ scope }}</span>
+            <template #updateBy="tableData">
+                <span>{{ tableData.scope.updateBy }}</span>
             </template>
         </co-table>
+        <Pagination v-bind="pagination" @sizeChange="sizeChange" @currentPageChange="currentPageChange" />
     </div>
 </template>
 
@@ -49,23 +46,15 @@ import CoTableOperation from "@/components/table/CoTableOperation.vue";
 import CoTable from "@/components/table/CoTable.vue";
 import { dataFormat } from "@/utils/index";
 
-import CommonTable from "@/components/CommonTable.vue";
-import { TableOperationMode, TableHandlerOption } from "@/components/CommonTable";
+import { TableOperation, TableOperationOption, TableHandlerParams } from "@/components/table/table";
 import Pagination from "@/components/Pagination.vue";
 import { I18nData } from "@/api/types";
 import { getIl8nListApi, searchI18nListParams, i18nParams } from "@/api/i18n";
-import { $t, SUPPORT_LOCALES as locales } from "@/utils/i18n";
+import { $t, SUPPORT_LOCALES_LIST } from "@/utils/i18n";
 import { getToken } from "@/utils/token";
 import I18nConfig from "./I18nConfig.vue";
-import { TableOperation } from "@/components/table/table";
-
-function tableOperationHandler(t: TableOperation) {
-    console.log(t);
-}
-
 
 async function getI18nData(params: searchI18nListParams) {
-    console.log("🚀 ~ getI18nData ~ params:", params)
     tableData.isLoading = true;
     const result = await getIl8nListApi(params);
     if (result.code === 200) {
@@ -108,33 +97,23 @@ const tableData = reactive({
         {
             label: $t('system.i18nModule'),
             prop: 'i18nModule',
-            width: 180,
+            width: 150,
         },
         {
             label: $t('system.i18nKey'),
             prop: 'i18nKey',
-            width: 200,
+            width: 150,
         },
         {
             label: $t('system.i18nValue'),
             prop: 'i18nValue',
-            width: 250,
+            width: 200,
         },
     ],
     customizeTableHeaderConfig: [
         {
             label: $t('common.createTime'),
             prop: 'createTime',
-            width: 100,
-        },
-        {
-            label: $t('common.createBy'),
-            prop: 'createBy',
-            width: 100,
-        },
-        {
-            label: $t('common.updateTime'),
-            prop: 'updateTime',
             width: 100,
         },
         {
@@ -158,21 +137,30 @@ const tableHandleEventObj = {
         dialogConfig.mode = "Add";
         dialogConfig.data = initI18nData;
     },
-    async handleEdit(option: TableHandlerOption<I18nData>) {
+    async handleEdit(params: I18nData) {
         dialogConfig.isVisible = true;
         dialogConfig.title = $t('common.edit');
-        dialogConfig.data = option.option?.rowData as I18nData;
+        dialogConfig.data = params ;
         dialogConfig.mode = "Edit";
     },
     handleDelete() {
 
     },
-    async handleExport(config: TableHandlerOption<I18nData>) {
+    handleImport() { },
+    async handleExport() {
 
     }
 }
-const tableHandler = (option: TableHandlerOption<I18nData>) => {
-    tableHandleEventObj[`handle${option.mode}`](option);
+const tableOperationHandler = (payload: TableOperation) => {
+    tableHandleEventObj[`handle${payload}`]();
+}
+const tableHandler = (payload: TableHandlerParams<I18nData>) => {
+    console.log("🚀 ~ tableHandler ~ payload:", payload)
+    if(payload.mode === 'Edit'){
+        tableHandleEventObj[`handle${payload.mode}`](payload.rawData);
+    }else{
+        tableHandleEventObj[`handle${payload.mode}`]();
+    }
 }
 
 // 弹框相关逻辑
@@ -186,7 +174,7 @@ const initI18nData = {
 const dialogConfig = reactive({
     isVisible: false,
     title: '',
-    mode: '' as TableOperationMode,
+    mode: 'Add' as TableOperationOption,
     data: {} as I18nData,
 });
 

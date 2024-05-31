@@ -68,10 +68,10 @@ export interface FunctionList {
     updateTime?: Date,
     updateBy?: string,
 }
-
+import { support_locales } from "@/utils/i18n";
 export interface I18nData {
     i18nId:number,
-    locale:string,
+    locale:support_locales,
     i18nModule:string,
     i18nKey:string,
     i18nValue:string,

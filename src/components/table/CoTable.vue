@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 
-import { TableHeaderOption } from "./table";
+import { TableHeaderOption, TableOperationOption } from "./table";
 import Icon from "@/components/Icon.vue";
 import { $t } from "@/utils/i18n";
 
@@ -27,8 +27,10 @@ const props = defineProps({
         default: () => ([])
     }
 })
-
-
+const emit = defineEmits(['tableHandler']);
+const tableHandler = (mode: TableOperationOption, rawData: any) => {
+    emit('tableHandler', {mode, rawData});
+}
 </script>
 <template>
     <el-table v-loading="props.isLoading" :data="props.tableList">
@@ -36,7 +38,7 @@ const props = defineProps({
         <el-table-column :label="rows.label" :prop="rows.prop" :width="rows.width"
             v-for="rows in props.tableHeaderConfig" :key="rows.label" />
         <el-table-column v-for="rows in props.customizeTableHeaderConfig" :key="rows.label" :label="rows.label"
-            :prop="rows.prop">
+            :prop="rows.prop" :width="rows.width">
             <template #default="scope">
                 <slot :name="rows.prop" :scope="scope.row"></slot>
             </template>
@@ -44,11 +46,13 @@ const props = defineProps({
         <el-table-column :label="$t('common.operation')" align="center" class-name="small-padding fixed-width"
             fixed="right" min-width="120">
             <template #default="scope">
-                <slot :scope="scope.row">
-                    <el-button size="small" link type="primary">
+                <slot :tableData="scope.row">
+                    <el-button size="small" link type="primary" 
+                    @click="tableHandler('Edit',scope.row)">
                         <icon icon="svg-icon:edit" />{{ $t('common.edit') }}
                     </el-button>
-                    <el-button size="small" link type="primary">
+                    <el-button size="small" link type="primary"
+                    @click="tableHandler('Delete',scope.row)">
                         <icon icon="svg-icon:delete" />{{ $t('common.delete') }}
                     </el-button>
                 </slot>

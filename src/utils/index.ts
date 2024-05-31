@@ -8,6 +8,19 @@ export function dataFormat(date: string | Date, formatStr: string) {
 }
 
 export function isEmptyObj(obj: Object | null) {
-    if(obj === null || obj === "{}") return true
+    if (obj === null || obj === "{}") return true
     return Object.keys(obj).length === 0 && obj.constructor === Object
+}
+
+export function getPathQuery(path: string) {
+    const query = path.split('?')[1]
+    const queryObj : { [key: string]: string } = {}
+    if (query) {
+        const queryArr = query.split('&')
+        queryArr.forEach(item => {
+            const itemArr = item.split('=');
+            queryObj[itemArr[0]] = itemArr[1];
+        })
+    }
+    return queryObj;
 }

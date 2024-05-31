@@ -1,17 +1,17 @@
 import service from "@/utils/request";
-import { I18nData,Page } from "@/api/types";
+import { I18nData, Page } from "@/api/types";
 
 export interface i18nParams {
     // 语言环境
-    i18nId?:Number,
-    locale?:string,
+    i18nId?: Number,
+    locale?: string,
     i18nModule?: string,
     i18nKey?: string,
 }
 
 interface PageParams {
-    current:Number,
-    size:Number,
+    current: Number,
+    size: Number,
 }
 export type searchI18nListParams = i18nParams & PageParams
 /**
@@ -48,7 +48,7 @@ export async function editIl8nListApi(i18nData: I18nData) {
 }
 
 export async function deleteIl8n(i18nId: Number) {
-    return await service.post<String>(`/i18n/i18n_id/${i18nId}`,{});
+    return await service.post<String>(`/i18n/i18n_id/${i18nId}`, {});
 }
 
 /**
@@ -56,6 +56,6 @@ export async function deleteIl8n(i18nId: Number) {
  * @param {i18nParams} params
  * @return {*}
  */
-export async function getIl8nPackageApi(params: i18nParams) {
-    return await service.get<I18nData[]>(`/i18n/locale/${params.locale}`);
+export async function getIl8nPackageApi() {
+    return await service.get<I18nData[]>(`/i18n/locale`);
 }

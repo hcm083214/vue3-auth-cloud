@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test":"vite --mode test",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -19,8 +20,10 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@types/mockjs": "^1.0.10",
     "@types/nprogress": "^0.2.3",
     "@vitejs/plugin-vue": "^5.0.4",
+    "mockjs": "^1.1.0",
     "sass": "^1.72.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2",

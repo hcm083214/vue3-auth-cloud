@@ -13,10 +13,21 @@ export default defineComponent({
             default: () => []
         }
     },
-    emits: ["tableOperationHandler"],
+    emits: {
+        tableOperationHandler: (payload: TableOperation) => { }
+    },
     setup(props, ctx) {
         const { slots } = ctx;
-        const tableOperationMap = {
+        type TableOperationMap = {
+            [key in TableOperation]: {
+                icon: string;
+                label: string;
+                type: "default" | "text" | "success" | "warning" | "info" | "primary" | "danger";
+                plain: boolean;
+                onClick: () => void;
+            };
+        };
+        const tableOperationMap:TableOperationMap = {
             Add: {
                 icon: "svg-icon:add",
                 label: "common.add",
@@ -24,15 +35,6 @@ export default defineComponent({
                 plain: true,
                 onClick: () => {
                     ctx.emit("tableOperationHandler", "Add");
-                }
-            },
-            Edit: {
-                icon: "svg-icon:edit",
-                label: "common.edit",
-                type: "success",
-                plain: true,
-                onClick: () => {
-                    ctx.emit("tableOperationHandler", "Edit");
                 }
             },
             Delete: {

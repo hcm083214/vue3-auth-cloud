@@ -9,7 +9,7 @@
         <div class="flex " v-for="(item, index) in i18nForm.localeData" :key="index">
             <el-form-item :label="$t('system.locale')" prop="locale" class="col2">
                 <el-select v-model="item.locale" class="m-2" placeholder="Select">
-                    <el-option v-for="item in locales" :key="item" :label="item" :value="item" />
+                    <el-option v-for="item in SUPPORT_LOCALES_LIST" :key="item" :label="item" :value="item" />
                 </el-select>
             </el-form-item>
             <el-form-item :label="$t('system.i18nValue')" prop="i18nValue" class="col2">
@@ -31,10 +31,10 @@ import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from "element-plus";
 
-import { $t, SUPPORT_LOCALES as locales } from "@/utils/i18n";
+import { $t, SUPPORT_LOCALES_LIST  } from "@/utils/i18n";
 import { addIl8nListApi, editIl8nListApi } from "@/api/i18n"
 import { I18nData } from "@/api/types";
-import { TableOperationMode } from "@/components/CommonTable";
+import { TableOperationOption } from "@/components/table/table";
 
 const props = defineProps({
     i18nConfigData: {
@@ -42,7 +42,7 @@ const props = defineProps({
         default: () => ({})
     },
     mode: {
-        type: String as () => TableOperationMode,
+        type: String as () => TableOperationOption,
         default: 'Add'
     }
 })
@@ -70,7 +70,7 @@ function handleAddLocale() {
         i18nValue: ''
     })
 }
-async function handleClick(formEl: FormInstance | undefined, mode: TableOperationMode) {
+async function handleClick(formEl: FormInstance | undefined, mode: TableOperationOption) {
     if (!formEl) return
     let isValidPass = await formEl.validate(async (valid, fields) => {
         if (valid) {

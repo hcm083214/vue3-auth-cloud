@@ -11,7 +11,7 @@ import { getToken, removeToken } from "./token.js";
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';
 
 const service: AxiosInstance = axios.create({
-    baseURL: '/api',
+    baseURL: import.meta.env.VITE_APP_BASE_API,
     // 超时
     timeout: 5000
 })

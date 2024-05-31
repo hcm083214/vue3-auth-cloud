@@ -28,7 +28,7 @@ const router = createRouter({
 
 router.beforeEach(async(to, from, next) => {
     NProgress.start();
-    await loadLanguageAsync(getLocale() as support_locales);
+    await loadLanguageAsync(getLocale());
     next();
 });
 router.afterEach(() => {

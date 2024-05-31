@@ -8,6 +8,7 @@ import "@/index.css"
 import "@/style.scss"
 import i18n from "@/utils/i18n";
 import App from './App.vue'
+import "@/api/mock/index";
 
 createApp(App)
     .use(router)
