@@ -26,6 +26,7 @@ const props = defineProps({
         default: 16
     }
 })
+// vite-plugin-svg-icons @purge-icons/generated https://github.com/unplugin/unplugin-icons
 // 判断是否是本地图标
 const isLocal = computed(() => props.icon.startsWith('svg-icon:'))
 // 如果是本地图标拆分出 svg-icon: 后面的字段
