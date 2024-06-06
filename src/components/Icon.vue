@@ -13,7 +13,7 @@ const props = defineProps({
     // icon name
     icon: {
         type: String,
-        default: ''
+        required: true,
     },
     // icon color
     color: {

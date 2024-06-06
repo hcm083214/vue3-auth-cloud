@@ -81,6 +81,7 @@ export default defineComponent({
                 )
             ])
         })
+        console.log(children)
         return () => {
             return h(ElRow, { gutter: 10 }, [children, h(ElCol, { span: 1.5 }, slots.default && slots.default())])
         };

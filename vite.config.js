@@ -1,7 +1,11 @@
 import { defineConfig } from 'vite'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import Icons from "unplugin-icons/vite";
+import IconsResolver from 'unplugin-icons/resolver'
+import Components from 'unplugin-vue-components/vite'
 import path from 'path'
 import vue from '@vitejs/plugin-vue'
-
+console.log(path.resolve(__dirname, 'src/assets/svg'))
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   console.log(command, mode)
@@ -21,7 +25,22 @@ export default defineConfig(({ command, mode }) => {
       },
       host: '0.0.0.0'
     },
-    plugins: [vue()],
+    plugins: [
+      vue(),
+      createSvgIconsPlugin({
+        iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],
+        symbolId: 'icon-[name]',
+        svgoOptions: true
+      }),
+      Components({
+        resolvers: [
+          IconsResolver(),
+        ],
+      }),
+      Icons({
+        // autoInstall: true,
+      }),
+    ],
     build: {
       sourcemap: true
     }
