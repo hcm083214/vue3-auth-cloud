@@ -4,6 +4,12 @@ import NProgress from 'nprogress';
 import { loadLanguageAsync, getLocale, support_locales } from "@/utils/i18n"
 
 const constantRoutes = [
+    { path: '/', redirect: '/home' },
+    {
+        path: '/home',
+        name: 'home',
+        component: () => import('@/views/Home.vue'),
+    },
     {
         path: '/login',
         name: 'login',
@@ -17,7 +23,7 @@ const constantRoutes = [
     {
         path: '/i18n',
         name: 'i18n',
-        component: () => import('@/views/system/i18n/I18n.vue'),
+        component: () => import('@/views/tool/language/I18n.vue'),
     },
 ];
 
@@ -26,7 +32,7 @@ const router = createRouter({
     routes: constantRoutes,
 });
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     NProgress.start();
     await loadLanguageAsync(getLocale());
     next();

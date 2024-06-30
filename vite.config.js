@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import Icons from "unplugin-icons/vite";
 import IconsResolver from 'unplugin-icons/resolver'
-import Components from 'unplugin-vue-components/vite'
+// import Components from 'unplugin-vue-components/vite'
 import path from 'path'
 import vue from '@vitejs/plugin-vue'
 console.log(path.resolve(__dirname, 'src/assets/svg'))
@@ -13,6 +13,16 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src')
+      }
+    },
+    css: {
+      preprocessorOptions: {
+        // 全局样式引入
+        scss: {
+          // 文件路径，注意最后需要添加 ';'
+          additionalData: '@import "@/assets/styles/variables.scss";',
+          javascriptEnabled: true
+        }
       }
     },
     server: {
@@ -32,13 +42,13 @@ export default defineConfig(({ command, mode }) => {
         symbolId: 'icon-[name]',
         svgoOptions: true
       }),
-      Components({
-        resolvers: [
-          IconsResolver(),
-        ],
-      }),
+      // Components({
+      //   resolvers: [
+      //     IconsResolver(),
+      //   ],
+      // }),
       Icons({
-        // autoInstall: true,
+        autoInstall: true,
       }),
     ],
     build: {

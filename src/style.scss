@@ -1,13 +1,17 @@
-@import "@/assets/styles/variables.scss";
-
 :root {
-  --base-logo-background: #2b2f3a;
-  --base-logo-text-color: $white;
+  --base-header-height: 50px;
 
-  --base-navbar-background: $white;
-  --base-navbar-text-color: $base-text-color;
+  --base-logo-background: #304156;
+  --base-logo-text-color: #ffffff;
 
-  --base-icon-text-color: $base-text-color;
+  --base-sidebar-background: #1f2d3d;
+  --base-sidebar-text-color: #bfcbd9;
+
+  --base-sidebar-header-background: #304156;
+  --base-sidebar-header-text-color: #bfcbd9;
+
+
+  --base-icon-text-color: #303133;
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

@@ -50,7 +50,7 @@ import { TableOperation, TableOperationOption, TableHandlerParams } from "@/comp
 import Pagination from "@/components/Pagination.vue";
 import { I18nData } from "@/api/types";
 import { getIl8nListApi, searchI18nListParams, i18nParams } from "@/api/i18n";
-import { $t, SUPPORT_LOCALES_LIST } from "@/utils/i18n";
+import { $t, SUPPORT_LOCALES_LIST,support_locales } from "@/utils/i18n";
 import { getToken } from "@/utils/token";
 import I18nConfig from "./I18nConfig.vue";
 
@@ -169,7 +169,7 @@ const initI18nData = {
     i18nKey: "",
     i18nModule: "",
     i18nValue: "",
-    locale: "",
+    locale: "" as support_locales,
 }
 const dialogConfig = reactive({
     isVisible: false,
