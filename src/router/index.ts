@@ -21,8 +21,8 @@ const constantRoutes = [
         component: () => import('@/views/auth/Register.vue'),
     },
     {
-        path: '/i18n',
-        name: 'i18n',
+        path: '/tool/language',
+        name: 'language',
         component: () => import('@/views/tool/language/I18n.vue'),
     },
 ];

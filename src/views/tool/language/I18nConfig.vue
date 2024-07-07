@@ -32,13 +32,12 @@ import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from "element-plus";
 
 import { $t, SUPPORT_LOCALES_LIST  } from "@/utils/i18n";
-import { addIl8nListApi, editIl8nListApi } from "@/api/i18n"
-import { I18nData } from "@/api/types";
+import { addIl8nListApi, editIl8nListApi,i18nResponse } from "@/api/i18n"
 import { TableOperationOption } from "@/components/table/table";
 
 const props = defineProps({
     i18nConfigData: {
-        type: Object as () => I18nData,
+        type: Object as () => i18nResponse,
         default: () => ({})
     },
     mode: {
@@ -66,7 +65,7 @@ const rules = reactive<FormRules>({
 
 function handleAddLocale() {
     i18nForm.localeData.push({
-        locale: '',
+        locale: "zh-CN",
         i18nValue: ''
     })
 }
@@ -108,7 +107,7 @@ function objToArr(i18nForm: i18nFormType) {
             i18nModule: i18nForm.i18nModule,
             i18nKey: i18nForm.i18nKey,
         })
-        return i as I18nData;
+        return i as i18nResponse;
     })
 }
 function resetQuery(formEl: FormInstance | undefined) {

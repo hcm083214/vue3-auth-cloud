@@ -48,8 +48,7 @@ import { dataFormat } from "@/utils/index";
 
 import { TableOperation, TableOperationOption, TableHandlerParams } from "@/components/table/table";
 import Pagination from "@/components/Pagination.vue";
-import { I18nData } from "@/api/types";
-import { getIl8nListApi, searchI18nListParams, i18nParams } from "@/api/i18n";
+import { getIl8nListApi, searchI18nListParams, i18nParams,i18nResponse } from "@/api/i18n";
 import { $t, SUPPORT_LOCALES_LIST,support_locales } from "@/utils/i18n";
 import { getToken } from "@/utils/token";
 import I18nConfig from "./I18nConfig.vue";
@@ -59,11 +58,12 @@ async function getI18nData(params: searchI18nListParams) {
     const result = await getIl8nListApi(params);
     if (result.code === 200) {
         tableData.i18nList = result.data.records;
+        console.log("🚀 ~ getI18nData ~ tableData.i18nList:", tableData.i18nList)
         pagination.total = result.data.total;
     }
     tableData.isLoading = false;
 }
-onMounted(() => getI18nData({ current: pagination.current, size: pagination.size }));
+onMounted(async() => await getI18nData({ current: pagination.current, size: pagination.size }));
 
 const queryParams = reactive<i18nParams>({
     locale: '',
@@ -71,8 +71,8 @@ const queryParams = reactive<i18nParams>({
     i18nKey: "",
 })
 const queryForm = ref();
-function handleQuery() {
-    getI18nData({ current: pagination.current, size: pagination.size, ...queryParams });
+async function handleQuery() {
+    await getI18nData({ current: pagination.current, size: pagination.size, ...queryParams });
 }
 function resetQuery(formEl: FormInstance | undefined) {
     if (!formEl) return
@@ -81,7 +81,7 @@ function resetQuery(formEl: FormInstance | undefined) {
 }
 
 const tableData = reactive({
-    i18nList: [] as I18nData[],
+    i18nList: [] as i18nResponse[],
     isLoading: false,
     headerConfig: [
         {
@@ -137,7 +137,7 @@ const tableHandleEventObj = {
         dialogConfig.mode = "Add";
         dialogConfig.data = initI18nData;
     },
-    async handleEdit(params: I18nData) {
+    async handleEdit(params: i18nResponse) {
         dialogConfig.isVisible = true;
         dialogConfig.title = $t('common.edit');
         dialogConfig.data = params ;
@@ -154,7 +154,7 @@ const tableHandleEventObj = {
 const tableOperationHandler = (payload: TableOperation) => {
     tableHandleEventObj[`handle${payload}`]();
 }
-const tableHandler = (payload: TableHandlerParams<I18nData>) => {
+const tableHandler = (payload: TableHandlerParams<i18nResponse>) => {
     console.log("🚀 ~ tableHandler ~ payload:", payload)
     if(payload.mode === 'Edit'){
         tableHandleEventObj[`handle${payload.mode}`](payload.rawData);
@@ -175,7 +175,7 @@ const dialogConfig = reactive({
     isVisible: false,
     title: '',
     mode: 'Add' as TableOperationOption,
-    data: {} as I18nData,
+    data: {} as i18nResponse,
 });
 
 const handleConfig = () => {

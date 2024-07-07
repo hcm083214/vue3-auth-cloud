@@ -1,5 +1,6 @@
 import service from "@/utils/request";
-import { I18nData, Page } from "@/api/types";
+import { support_locales } from "@/utils/i18n";
+import { Page } from "@/api/types";
 
 export interface i18nParams {
     // 语言环境
@@ -9,18 +10,28 @@ export interface i18nParams {
     i18nKey?: string,
 }
 
+export interface i18nResponse {
+    i18nId:number,
+    locale:support_locales,
+    i18nModule:string,
+    i18nKey:string,
+    i18nValue:string,
+    createTime?:Date,
+}
 interface PageParams {
     current: Number,
     size: Number,
 }
+
 export type searchI18nListParams = i18nParams & PageParams
+
 /**
  * @description: 得到国际化数据的列表
  * @param {i18nParams} params
  * @return {*}
  */
 export async function getIl8nListApi(params: searchI18nListParams) {
-    return await service.get<Page<I18nData>>(`/i18n/list`, {
+    return await service.get<Page<i18nResponse>>(`/i18n/list`, {
         params
     });
 }
@@ -30,7 +41,7 @@ export async function getIl8nListApi(params: searchI18nListParams) {
  * @param {i18nParams} params
  * @return {*}
  */
-export async function addIl8nListApi(i18nData: I18nData[]) {
+export async function addIl8nListApi(i18nData: i18nResponse[]) {
     return await service.post<String>(`/i18n/add`, {
         data: i18nData
     });
@@ -41,7 +52,7 @@ export async function addIl8nListApi(i18nData: I18nData[]) {
  * @param {i18nParams} params
  * @return {*}
  */
-export async function editIl8nListApi(i18nData: I18nData) {
+export async function editIl8nListApi(i18nData: i18nResponse) {
     return await service.post<String>(`/i18n/edit`, {
         data: i18nData
     });
@@ -57,5 +68,5 @@ export async function deleteIl8n(i18nId: Number) {
  * @return {*}
  */
 export async function getIl8nPackageApi() {
-    return await service.get<I18nData[]>(`/i18n/locale`);
+    return await service.get<i18nResponse[]>(`/i18n/locale`);
 }

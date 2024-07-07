@@ -20,19 +20,7 @@ export interface Count {
     [att:string]: number;
 }
 
-export interface Resource {
-    resourceId: number,
-    resourceName: string,
-    parentId: number,
-    component: string,
-    path: string,
-    icon: string,
-    perms?: string,
-    orderNum?: string,
-    resourceType: string,
-    children: Resource[],
-    pageCounter:Count,
-}
+
 
 export interface RoleList {
     roleId: number,
@@ -67,13 +55,4 @@ export interface FunctionList {
     createBy?: string,
     updateTime?: Date,
     updateBy?: string,
-}
-import { support_locales } from "@/utils/i18n";
-export interface I18nData {
-    i18nId:number,
-    locale:support_locales,
-    i18nModule:string,
-    i18nKey:string,
-    i18nValue:string,
-    createTime?:Date,
 }

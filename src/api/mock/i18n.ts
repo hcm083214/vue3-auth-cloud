@@ -156,30 +156,33 @@ Mock.mock({
 import Mock from "mockjs";
 
 
-import { SUPPORT_LOCALES_LIST } from "@/utils/i18n";
+import { SUPPORT_LOCALES_LIST, support_locales } from "@/utils/i18n";
 import { getPathQuery } from "@/utils/index";
-const Random = Mock.Random;
-
+import { mockRandomGenerator as Random, mockData } from './utils';
 Mock.mock(RegExp("/mock/i18n/list" + ".*"), "get", (options) => {
     const queryObj = getPathQuery(options.url);
-    const records = `records|${queryObj.size}`;
-    const total = Random.natural(10, 100);
+    const size = +queryObj.size || 10;
+    const current = +queryObj.current || 1;
+    const minTotal = size * current;
+    const total = Random.natural(minTotal,Random.natural(minTotal, minTotal+1000));
+    const responseList = mockData(size, (Random) => ({
+        "i18nId": 1,
+        "locale": SUPPORT_LOCALES_LIST[Random.natural(0, 1)],
+        "i18nModule": Random.string(Random.natural(1, 3), Random.natural(4, 8)),
+        "i18nKey": Random.string(Random.natural(1, 3), Random.natural(4, 8)),
+        "i18nValue": Random.string(Random.natural(1, 3), Random.natural(4, 8)),
+        "createTime": Random.datetime(),
+    }))
+
     return Mock.mock({
         code: 200,
         msg: "success",
         data: {
             total, // 查询列表总记录数
-            current: queryObj.current, // 当前页
-            size: queryObj.size, // 每页显示条数
-            pages: Math.ceil(total / +queryObj.size), // 总页数
-            [records]: [{
-                "i18nId|+1": 1,
-                "locale|1": SUPPORT_LOCALES_LIST,
-                "i18nModule": Random.string(Random.natural(1, 3), Random.natural(4, 8)),
-                "i18nKey": Random.string(Random.natural(1, 3), Random.natural(4, 8)),
-                "i18nValue": Random.string(Random.natural(1, 3), Random.natural(4, 8)),
-                "createTime": Random.datetime(),
-            }] // 查询数据列表
+            current, // 当前页
+            size, // 每页显示条数
+            pages: Math.ceil(total / size), // 总页数
+            records: responseList // 查询数据列表
         }
     })
 })
