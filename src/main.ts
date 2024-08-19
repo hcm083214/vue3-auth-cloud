@@ -3,6 +3,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'nprogress/nprogress.css'
 import 'virtual:svg-icons-register'
+import { createPinia } from 'pinia'
 
 import router from "@/router/index";
 
@@ -16,4 +17,5 @@ createApp(App)
     .use(router)
     .use(i18n)
     .use(ElementPlus)
+    .use(createPinia())
     .mount('#app')

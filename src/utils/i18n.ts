@@ -1,8 +1,7 @@
 import { createI18n } from "vue-i18n";
 import { nextTick } from 'vue'
 
-import { getIl8nPackageApi } from "@/api/i18n";
-import { I18nData } from "@/api/types";
+import { getIl8nPackageApi,i18nResponse } from "@/api/i18n";
 import locales_package from "@/assets/language/index";
 import { isEmptyObj } from "@/utils/index";
 
@@ -71,7 +70,7 @@ export const i18n = createI18n({
 const { t } = i18n.global
 export const $t = t;
 
-function formatLocalePackage(i18nData: I18nData[]) {
+function formatLocalePackage(i18nData: i18nResponse[]) {
     const localePackage = {} as LocalePackage;
     i18nData.forEach(i => {
         if (!localePackage[i.locale]) {
@@ -116,7 +115,6 @@ export async function loadLanguageAsync(locale: support_locales) {
     }
     i18n.global.locale.value = locale;
     (document.querySelector('html') as HTMLHtmlElement).setAttribute('lang', locale);
-
     return nextTick();
 }
 

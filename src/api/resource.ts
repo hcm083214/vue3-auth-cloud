@@ -1,15 +1,17 @@
 import service from "@/utils/request";
 
+export type ResourceType = "D" | "M" | "B";
 export interface ResourceResponse {
-    resourceId: number,
+    resourceId: string,
     resourceName: string,
     parentId: number,
     component: string,
-    path: string,
+    resourcePath: string,
+    routerName: string,
     icon: string,
-    perms?: string,
+    permissionKey?: string,
     orderNum?: string,
-    resourceType: string,
+    resourceType: ResourceType,
     children: ResourceResponse[],
 }
 
@@ -19,5 +21,5 @@ export interface ResourceResponse {
  * @return {*}
  */
 export async function getMenuListApi() {
-    return await service.get<ResourceResponse>(`/resource/menu`);
+    return await service.get<ResourceResponse[]>(`/resource/menus`);
 }

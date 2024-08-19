@@ -7,6 +7,13 @@ import IconExpand from '~icons/bx/expand';
 import IconTextSize from '~icons/uil/text-size';
 import IconArrowDown from '~icons/dashicons/arrow-down';
 
+import { storeToRefs } from 'pinia';
+
+import { useMenuStore } from '@/store/menu'
+
+const menuStore = useMenuStore();
+const { activeMenuId, breadcrumbMenu } = storeToRefs(menuStore);
+
 </script>
 
 <template>
@@ -17,12 +24,13 @@ import IconArrowDown from '~icons/dashicons/arrow-down';
             </div>
             <div class="breadcrumb-container">
                 <el-breadcrumb separator="/">
-                    <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-                    <el-breadcrumb-item>
-                        <a href="/">promotion management</a>
-                    </el-breadcrumb-item>
-                    <el-breadcrumb-item>promotion list</el-breadcrumb-item>
-                    <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
+                    <template v-for="menu in breadcrumbMenu">
+                        <el-breadcrumb-item :class="{ 'active-menu': activeMenuId === menu.resourceId }"
+                            v-if="menu.resourceType === 'M'" :to="{ path: menu.resourcePath }">
+                            {{ menu.resourceName  }}
+                        </el-breadcrumb-item>
+                        <el-breadcrumb-item v-else>{{ menu.resourceName }}</el-breadcrumb-item>
+                    </template>
                 </el-breadcrumb>
             </div>
         </div>
@@ -51,6 +59,11 @@ import IconArrowDown from '~icons/dashicons/arrow-down';
     .header-left {
         display: flex;
         align-items: center;
+
+        .active-menu {
+            --el-text-color-regular : #ffd04b;
+            color: var(--base-sidebar-active-color);
+        }
 
         .expand {
             display: flex;

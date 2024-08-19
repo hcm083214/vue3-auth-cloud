@@ -23,6 +23,10 @@
         </el-dialog>
         <co-table-operation :tableOperation='["Add", "Export", "Import"]'
             @tableOperationHandler="tableOperationHandler">
+            <template #default="scope">
+                <el-button type="text" @click="tableHandleEventObj.handleEdit(scope.row)">{{ $t('common.edit') }}</el-button>
+                <el-button type="text" @click="tableHandleEventObj.handleDelete()">{{ $t('common.delete') }}</el-button>
+            </template>
         </co-table-operation>
         <co-table :tableList="tableData.i18nList" :isLoading="tableData.isLoading"
             :tableHeaderConfig="tableData.headerConfig"
@@ -33,7 +37,7 @@
             <template #updateBy="tableData">
                 <span>{{ tableData.scope.updateBy }}</span>
             </template>
-        </co-table>
+        </co-table> 
         <Pagination v-bind="pagination" @sizeChange="sizeChange" @currentPageChange="currentPageChange" />
     </div>
 </template>
@@ -48,8 +52,8 @@ import { dataFormat } from "@/utils/index";
 
 import { TableOperation, TableOperationOption, TableHandlerParams } from "@/components/table/table";
 import Pagination from "@/components/Pagination.vue";
-import { getIl8nListApi, searchI18nListParams, i18nParams,i18nResponse } from "@/api/i18n";
-import { $t, SUPPORT_LOCALES_LIST,support_locales } from "@/utils/i18n";
+import { getIl8nListApi, searchI18nListParams, i18nParams, i18nResponse } from "@/api/i18n";
+import { $t, SUPPORT_LOCALES_LIST, support_locales } from "@/utils/i18n";
 import { getToken } from "@/utils/token";
 import I18nConfig from "./I18nConfig.vue";
 
@@ -58,12 +62,11 @@ async function getI18nData(params: searchI18nListParams) {
     const result = await getIl8nListApi(params);
     if (result.code === 200) {
         tableData.i18nList = result.data.records;
-        console.log("🚀 ~ getI18nData ~ tableData.i18nList:", tableData.i18nList)
         pagination.total = result.data.total;
     }
     tableData.isLoading = false;
 }
-onMounted(async() => await getI18nData({ current: pagination.current, size: pagination.size }));
+onMounted(async () => await getI18nData({ current: pagination.current, size: pagination.size }));
 
 const queryParams = reactive<i18nParams>({
     locale: '',
@@ -140,7 +143,7 @@ const tableHandleEventObj = {
     async handleEdit(params: i18nResponse) {
         dialogConfig.isVisible = true;
         dialogConfig.title = $t('common.edit');
-        dialogConfig.data = params ;
+        dialogConfig.data = params;
         dialogConfig.mode = "Edit";
     },
     handleDelete() {
@@ -155,10 +158,9 @@ const tableOperationHandler = (payload: TableOperation) => {
     tableHandleEventObj[`handle${payload}`]();
 }
 const tableHandler = (payload: TableHandlerParams<i18nResponse>) => {
-    console.log("🚀 ~ tableHandler ~ payload:", payload)
-    if(payload.mode === 'Edit'){
+    if (payload.mode === 'Edit') {
         tableHandleEventObj[`handle${payload.mode}`](payload.rawData);
-    }else{
+    } else {
         tableHandleEventObj[`handle${payload.mode}`]();
     }
 }
@@ -190,14 +192,14 @@ const pagination = reactive({
     sizeSelection: [10, 20, 50, 100, 200]
 })
 
-function sizeChange(size: number) {
+async function sizeChange(size: number) {
     pagination.size = size;
-    getI18nData({ current: pagination.current, size });
+    await getI18nData({ current: pagination.current, size });
 }
 
-function currentPageChange(current: number) {
+async function currentPageChange(current: number) {
     pagination.current = current;
-    getI18nData({ current, size: pagination.size });
+    await getI18nData({ current, size: pagination.size });
 }
 </script>
 

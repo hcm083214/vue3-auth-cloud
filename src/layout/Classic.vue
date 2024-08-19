@@ -7,7 +7,7 @@ import SideBar from "@/layout/side/SideBar.vue";
     <div class="app-main-wrap">
         <div class="app-main-left">
             <div class="logo">
-                <router-link to="/">权限管理系统</router-link>
+                <router-link :to="{ name: 'home' }">权限管理系统</router-link>
             </div>
             <side-bar />
         </div>
@@ -47,8 +47,10 @@ import SideBar from "@/layout/side/SideBar.vue";
     .app-main-right {
         width: calc(1 - var(--sideBarWidth));
         flex-grow: 1;
-        .app-main{
+
+        .app-main {
             box-sizing: border-box;
+            width: 100%;
             padding: 5px;
             overflow-y: scroll;
             height: calc(100% - var(--base-header-height));

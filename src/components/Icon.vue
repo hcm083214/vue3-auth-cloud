@@ -1,6 +1,6 @@
 <template>
-    <el-icon :class="icon" :size="size" :color="color" class="svg-icon">
-        <svg aria-hidden="true" v-if="isLocal">
+    <el-icon :class="icon" :size="size"  class="svg-icon">
+        <svg aria-hidden="true" v-if="isLocal" :color="color">
             <use :xlink:href="symbolId"  />
         </svg>
     </el-icon>
