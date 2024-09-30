@@ -1,6 +1,7 @@
 import service from "@/utils/request";
 
 export type ResourceType = "D" | "M" | "B";
+
 export interface ResourceResponse {
     resourceId: string,
     resourceName: string,
@@ -16,7 +17,7 @@ export interface ResourceResponse {
 }
 
 /**
- * @description: 得到国际化数据的列表
+ * @description: 侧边栏菜单列表
  * @param {i18nParams} params
  * @return {*}
  */

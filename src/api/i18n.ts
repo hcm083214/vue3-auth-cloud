@@ -31,7 +31,7 @@ export type searchI18nListParams = i18nParams & PageParams
  * @return {*}
  */
 export async function getIl8nListApi(params: searchI18nListParams) {
-    return await service.get<Page<i18nResponse>>(`/i18n/list`, {
+    return await service.get<Page<i18nResponse>>(`/language/list`, {
         params
     });
 }
@@ -42,7 +42,7 @@ export async function getIl8nListApi(params: searchI18nListParams) {
  * @return {*}
  */
 export async function addIl8nListApi(i18nData: i18nResponse[]) {
-    return await service.post<String>(`/i18n/add`, {
+    return await service.post<String>(`/language`, {
         data: i18nData
     });
 }
@@ -53,13 +53,13 @@ export async function addIl8nListApi(i18nData: i18nResponse[]) {
  * @return {*}
  */
 export async function editIl8nListApi(i18nData: i18nResponse) {
-    return await service.post<String>(`/i18n/edit`, {
+    return await service.put<String>(`/language`, {
         data: i18nData
     });
 }
 
 export async function deleteIl8n(i18nId: Number) {
-    return await service.post<String>(`/i18n/i18n_id/${i18nId}`, {});
+    return await service.delete<String>(`/language/i18n_id/${i18nId}`, {});
 }
 
 /**
@@ -68,5 +68,5 @@ export async function deleteIl8n(i18nId: Number) {
  * @return {*}
  */
 export async function getIl8nPackageApi() {
-    return await service.get<i18nResponse[]>(`/i18n/locale`);
+    return await service.get<i18nResponse[]>(`/language/locale`);
 }

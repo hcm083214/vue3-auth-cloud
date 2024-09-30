@@ -75,5 +75,11 @@ export default {
     },
     post<T>(url: string, option: AxiosRequestConfig): Promise<ResultData<T>> {
         return service.post(url, option.data, option);
+    },
+    put<T>(url: string, option: AxiosRequestConfig): Promise<ResultData<T>> {
+        return service.put(url, option.data, option);
+    },
+    delete<T>(url: string, option: AxiosRequestConfig): Promise<ResultData<T>> {
+        return service.delete(url, option.data);
     }
 };

@@ -159,7 +159,7 @@ import Mock from "mockjs";
 import { SUPPORT_LOCALES_LIST, support_locales } from "@/utils/i18n";
 import { getPathQuery } from "@/utils/index";
 import { mockRandomGenerator as Random, mockData } from './utils';
-Mock.mock(RegExp("/mock/i18n/list" + ".*"), "get", (options) => {
+Mock.mock(RegExp("/mock/language/list" + ".*"), "get", (options) => {
     const queryObj = getPathQuery(options.url);
     const size = +queryObj.size || 10;
     const current = +queryObj.current || 1;
