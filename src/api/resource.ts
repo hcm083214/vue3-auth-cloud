@@ -1,7 +1,7 @@
 import service from "@/utils/request";
 
 
-export type ResourceType = "D" | "M" | "B";
+export type ResourceType = "D" | "P" | "B";
 
 export interface Resource{
     resourceId: string,
@@ -26,5 +26,5 @@ export interface ResourceResponse extends Resource {
  * @return {*}
  */
 export async function getMenuListApi() {
-    return await service.get<ResourceResponse[]>(`/resource/menus`);
+    return await service.get<ResourceResponse[]>(`/resource/menus/tree`);
 }

@@ -1,30 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router";
-import type { RouteComponent } from "vue-router";
+import type { RouteComponent, RouteRecordRaw, RouteRecordName } from "vue-router";
 import NProgress from 'nprogress';
 
 import { loadLanguageAsync, getLocale, support_locales } from "@/utils/i18n"
 import { useMenuStore } from "@/store/menu";
 import Layout from "@/layout/Layout.vue";
-import { Resource } from "@/api/resource";
 
-export interface Menus  {
-    component: RouteComponent | Promise<RouteComponent>,
-    path: string,
-    name?: string,
-    redirect?: string | { name: string },
-    meta: {
-        title: string,
-        icon?: string,
-        hidden?: boolean,
-        keepAlive?: boolean,
-        activeMenu?: string,
-        breadcrumb?: boolean,
-        roles?: string[],
-    }
-    children?: Menus[]
-}
 
-const constantRoutes= [
+
+
+const constantRoutes = [
     {
         path: '/login',
         name: 'login',
@@ -49,10 +34,14 @@ const constantRoutes= [
                 name: 'home',
                 component: () => import('@/views/Home.vue'),
                 meta: { title: '首页' },
-            },
+            }
         ]
     }
 ];
+
+
+
+
 
 const router = createRouter({
     history: createWebHistory(),
@@ -72,6 +61,20 @@ router.afterEach(() => {
     // 关闭进度条
     NProgress.done()
 });
+
+export function addRoutes(parentName: RouteRecordName, routes: RouteRecordRaw[]) {
+    routes.forEach((route) => {
+        if (route.children && route.children.length > 0) {
+            if (route.name) {
+                addRoutes(route.name, route.children);
+            } else {
+                console.warn(`Route with path "${route.path}" has no name and will not be added to the router.`);
+            }
+        } else {
+            router.addRoute(parentName, route)
+        }
+    });
+}
 
 export const REDIRECT_KEY = "REDIREC";
 export default router;

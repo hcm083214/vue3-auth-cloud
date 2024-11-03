@@ -1,7 +1,7 @@
 import service from "../utils/request";
 import { UserInfo, Captcha } from "@/api/types"
 
-interface LoginRequestData {
+interface LoginRequest {
     userName?: string,
     password?: string,
     // 验证码或者第三方登录返回的code
@@ -35,10 +35,10 @@ export async function getCodeApi(type = "math") {
 
 /**
  * @description: 登入服务
- * @param {LoginRequestData} data
+ * @param {LoginRequest} data
  * @return {*}
  */
-export async function loginApi(data: LoginRequestData) {
+export async function loginApi(data: LoginRequest) {
     let result = await service.post<UserInfo>("/login", {
         headers: {
             isNotSetToken: true
@@ -50,10 +50,10 @@ export async function loginApi(data: LoginRequestData) {
 
 /**
  * @description: 注册服务
- * @param {LoginRequestData} data
+ * @param {LoginRequest} data
  * @return {*}
  */
-export async function registerApi(data: LoginRequestData) {
+export async function registerApi(data: LoginRequest) {
     let result = await service.post<UserInfo>("/register", {
         headers: {
             isNotSetToken: true
@@ -101,7 +101,7 @@ export async function preLoginByThirdPartyApi(source: string) {
  * @param {string} source 第三方
  * @return {*}
  */
-export async function loginByThirdPartyApi(data: LoginRequestData) {
+export async function loginByThirdPartyApi(data: LoginRequest) {
     return await service.post<UserInfo>("/login-third-party", {
         headers: {
             isNotSetToken: true

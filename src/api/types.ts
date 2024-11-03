@@ -6,7 +6,7 @@ export interface Captcha {
 
 export interface UserInfo {
     uuid: string,
-    roleId: number,
+    userId: number,
     userName: string,
     userType: string,
     avatar: string,
