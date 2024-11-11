@@ -1,7 +1,7 @@
 import Mock from "mockjs";
 
-import { asyncRoutes } from "@/router/createRoutes";
-const permissions = asyncRoutes.map(route => route.meta.permission);
+import { asyncRoutes } from "@/router/asyncRoutes";
+const permissions = asyncRoutes.map(route => route.meta.permissionKey);
 
 const Random = Mock.Random;
 Mock.mock(RegExp("/mock/login" + ".*"), "post", (options) => {
@@ -16,7 +16,7 @@ Mock.mock(RegExp("/mock/login" + ".*"), "post", (options) => {
                 userId: 1,
                 userName: Random.cname(),
                 userType: Random.string(6),
-                avatar: Random.image("200x100"),
+                avatar: Random.image("20x20"),
                 roleIds: [1, 2],
                 permissions,
             }

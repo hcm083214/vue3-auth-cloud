@@ -60,10 +60,7 @@ const router = [
     }
 ];
 import type { RouteComponent, RouteRecordRaw, RouteRecordName } from "vue-router";
-const directory = {
-    system:"系统工具",
-    authority:"权限管理",
-}
+import { menuDirectoryPermissionKey } from "@/store/menu";
 export interface RouteRecord {
     component: RouteComponent | Promise<RouteComponent>,
     path: string,
@@ -71,22 +68,27 @@ export interface RouteRecord {
     redirect?: string | { name: string },
     meta: {
         title: string,
-        permission: string,
-        directory: keyof typeof directory,
+        permissionKey: typeof pagePermissionKey[keyof typeof pagePermissionKey],
+        parentPermissionKey: typeof menuDirectoryPermissionKey[keyof typeof menuDirectoryPermissionKey],
         icon?: string,
         hidden?: boolean,
         keepAlive?: boolean,
     }
 }
-export const asyncRoutes :RouteRecord[]= [
+const pagePermissionKey = {
+    language: "page:system:language",
+    log: "page:system:log",
+    resource: "page:authority:resource"
+}
+export const asyncRoutes: RouteRecord[] = [
     {
         path: 'language',
         name: 'language',
         component: () => import('@/views/system/language/I18n.vue'),
         meta: {
             title: '国际化工具',
-            permission: 'page:system:language',
-            directory:'system'
+            permissionKey: pagePermissionKey.language,
+            parentPermissionKey: menuDirectoryPermissionKey.system
         }
     },
     {
@@ -95,8 +97,8 @@ export const asyncRoutes :RouteRecord[]= [
         component: () => import('@/views/system/log/Log.vue'),
         meta: {
             title: '国际化工具',
-            permission: 'page:system:log',
-            directory:'system'
+            permissionKey: pagePermissionKey.log,
+            parentPermissionKey: menuDirectoryPermissionKey.system
         }
     },
     {
@@ -105,8 +107,8 @@ export const asyncRoutes :RouteRecord[]= [
         component: () => import('@/views/authority/resource/Resource.vue'),
         meta: {
             title: '国际化工具',
-            permission: 'page:authority:resource',
-            directory:'authority'
+            permissionKey: pagePermissionKey.resource,
+            parentPermissionKey: menuDirectoryPermissionKey.authority
         }
     },
 ]

@@ -19,7 +19,7 @@ const service: AxiosInstance = axios.create({
 service.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     const token = getToken() || "";
     // 从请求头中获取 isNotSetToken，如果为 false 代表不需要携带 token
-    const isNotSetToken = (config.headers || {}).isNotSetToken;
+    const isNotSetToken = (config.headers || {}).isNotSetToken as boolean;
     if (token && !isNotSetToken) {
         config.headers['Authorization'] = token;
     }

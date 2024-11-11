@@ -54,7 +54,8 @@ router.beforeEach(async (to, from, next) => {
     const loadUserMenus = menuStore.loadUserMenus;
 
     await loadLanguageAsync(getLocale());
-    await loadUserMenus();
+    // TODOS：根据用户的permission匹配路由，将路由加入到菜单目录中
+    await loadUserMenus(localStorage.getItem('permission') as string);
     next();
 });
 router.afterEach(() => {

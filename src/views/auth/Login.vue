@@ -100,7 +100,7 @@ const loginRules = reactive<FormRules>({
     code: [{ required: true, trigger: "change", message: $t('login.codePlaceholder') }]
 });
 
-const saveUserToStorage = (isRememberMe: boolean) => {
+const rememberMeFn = (isRememberMe: boolean) => {
     if (isRememberMe) {
         localStorage.setItem(STORAGE_USER, JSON.stringify({
             userName: loginForm.userName,
@@ -116,11 +116,12 @@ const handleLogin = async (formEl: FormInstance | undefined) => {
     await formEl.validate(async (valid, fields) => {
         if (valid) {
             loginForm.loading = true;
-            saveUserToStorage(loginForm.rememberMe);
+            rememberMeFn(loginForm.rememberMe);
             const result = await loginApi(loginForm);
             loginForm.loading = false;
             if (result.code == 200) {
                 setToken(result.data.token);
+                localStorage.setItem("permission", result.data.permissions.join())
                 router.push(redirectPath);
             } else {
                 ElMessage({
