@@ -22,7 +22,7 @@
                 </div>
             </el-form-item>
             <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">{{ $t('login.remember')
-            }}</el-checkbox>
+                }}</el-checkbox>
             <el-form-item style="width:100%;">
                 <el-button :loading="loginForm.loading" type="primary" style="width:100%;"
                     @click.prevent="handleLogin(loginFormRef)">
@@ -59,6 +59,7 @@ import { REDIRECT_KEY } from "@/router/index";
 import { getCodeApi, loginApi, preLoginByThirdPartyApi } from "@/api/login";
 import Icon from "@/components/Icon.vue";
 import { $t } from "@/utils/i18n";
+import { USERPERMISSIONSTORAGE } from "@/router/asyncRoutes"
 
 const router = useRouter();
 const route = useRoute();
@@ -121,7 +122,7 @@ const handleLogin = async (formEl: FormInstance | undefined) => {
             loginForm.loading = false;
             if (result.code == 200) {
                 setToken(result.data.token);
-                localStorage.setItem("permission", result.data.permissions.join())
+                localStorage.setItem(USERPERMISSIONSTORAGE, result.data.permissions.join())
                 router.push(redirectPath);
             } else {
                 ElMessage({

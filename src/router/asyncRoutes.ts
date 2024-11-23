@@ -1,66 +1,17 @@
-const router = [
-    {
-        resourceId: 1,
-        resourceName: "首页",
-        resourcePath: "/home",
-        resourceType: "M",
-        routerName: "home",
-        permissionKey: "home",
-        parentId: 0,
-        children: []
-    },
-    {
-        resourceId: 2,
-        resourceName: "系统工具",
-        resourcePath: "",
-        resourceType: "D",
-        routerName: "",
-        parentId: 0,
-        children: [
-            {
-                resourceId: 3,
-                resourceName: "国际化工具",
-                resourcePath: "/system/language",
-                resourceType: "D",
-                parentId: 2,
-                children: [
-                    {
-                        resourceId: 4,
-                        resourceName: "国际化新增",
-                        resourcePath: "/system/language",
-                        resourceType: "M",
-                        routerName: "language",
-                        permissionKey: "language",
-                        parentId: 3,
-                        children: []
-                    },
-                ]
-            },
-            {
-                resourceId: 6,
-                resourceName: "日志管理",
-                resourcePath: "",
-                resourceType: "D",
-                routerName: "log",
-                parentId: 2,
-                children: [
-                    {
-                        resourceId: 7,
-                        resourceName: "日志修改",
-                        resourcePath: "/system/log",
-                        resourceType: "M",
-                        routerName: "log",
-                        permissionKey: "log",
-                        parentId: 6,
-                        children: []
-                    },
-                ]
-            },
-        ]
-    }
-];
 import type { RouteComponent, RouteRecordRaw, RouteRecordName } from "vue-router";
-import { menuDirectoryPermissionKey } from "@/store/menu";
+
+
+export const USERPERMISSIONSTORAGE = "user_permission";
+export const pagePermissionKey = {
+    language: "page:system:language",
+    log: "page:system:log",
+    resource: "page:authority:resource"
+}
+export const menuDirectoryPermissionKey = {
+    home: "button:home",
+    system: "directory:system",
+    authority: "directory:authority",
+}
 export interface RouteRecord {
     component: RouteComponent | Promise<RouteComponent>,
     path: string,
@@ -75,11 +26,7 @@ export interface RouteRecord {
         keepAlive?: boolean,
     }
 }
-const pagePermissionKey = {
-    language: "page:system:language",
-    log: "page:system:log",
-    resource: "page:authority:resource"
-}
+
 export const asyncRoutes: RouteRecord[] = [
     {
         path: 'language',
@@ -112,3 +59,6 @@ export const asyncRoutes: RouteRecord[] = [
         }
     },
 ]
+export function getRouteByPermissionKey(permissionKey:string) {
+    return asyncRoutes.find(item => item.meta.permissionKey === permissionKey)
+}

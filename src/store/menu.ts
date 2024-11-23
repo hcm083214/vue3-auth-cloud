@@ -1,44 +1,65 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-import { ResourceResponse, getMenuListApi,ResourceTypeEnum,MenuResource } from '@/api/resource';
+import { ResourceResponse, getMenuListApi, ResourceTypeEnum, MenuResource } from '@/api/resource';
 import { getTreesNodeByIds } from "@/utils/index";
-export const menuDirectoryPermissionKey = {
-    home:"button:home",
-    system:"directory:system",
-    authority:"directory:authority",
-}
-export const menuDirectoryTree:MenuResource[] = [
+import { getRouteByPermissionKey, RouteRecord,menuDirectoryPermissionKey } from "@/router/asyncRoutes";
+
+const menuDirectoryTree: MenuResource[] = [
     {
-        resourceId: "1",
+        resourceId: menuDirectoryPermissionKey.home,
         resourceName: "首页",
         parentId: "0",
         resourceType: ResourceTypeEnum.B,
-        permissionKey:menuDirectoryPermissionKey.home,
-        children:[] as MenuResource[],
+        permissionKey: menuDirectoryPermissionKey.home,
+        routerPath: "",
+        routerName: "",
+        children: [] as MenuResource[],
     },
     {
-        resourceId: "2",
+        resourceId: menuDirectoryPermissionKey.system,
         resourceName: "系统工具",
         parentId: "0",
         resourceType: ResourceTypeEnum.D,
-        permissionKey:menuDirectoryPermissionKey.system,
-        children:[] as MenuResource[],
+        permissionKey: menuDirectoryPermissionKey.system,
+        routerPath: "",
+        routerName: "",
+        children: [] as MenuResource[],
     },
     {
-        resourceId: "3",
+        resourceId: menuDirectoryPermissionKey.authority,
         resourceName: "权限管理",
         parentId: "0",
         resourceType: ResourceTypeEnum.D,
-        permissionKey:menuDirectoryPermissionKey.authority,
-        children:[] as MenuResource[],
+        permissionKey: menuDirectoryPermissionKey.authority,
+        routerPath: "",
+        routerName: "",
+        children: [] as MenuResource[],
     },
 ]
-
+function addMenuByDirectoryPermissionKey(routeRecord: RouteRecord) {
+    const parentPermissionKey = routeRecord.meta.parentPermissionKey;
+    if (parentPermissionKey) {
+        menuDirectoryTree.forEach(item => {
+            if (item.permissionKey === parentPermissionKey) {
+                item.children.push({
+                    resourceId: routeRecord.meta.permissionKey,
+                    resourceName: routeRecord.meta.title,
+                    parentId: routeRecord.meta.parentPermissionKey,
+                    resourceType: ResourceTypeEnum.P,
+                    permissionKey: routeRecord.meta.parentPermissionKey,
+                    routerPath: routeRecord.path,
+                    routerName: routeRecord.name,
+                    children: [] as MenuResource[],
+                })
+            }
+        })
+    }
+}
 export const useMenuStore = defineStore('menu', () => {
-    const menus = ref<MenuResource[]>([]);
-    
-    let activeMenuId = ref<string>("1");
+    const menus = ref(menuDirectoryTree);
+
+    let activeMenuId = ref(menuDirectoryPermissionKey.home);
     const breadcrumbMenu = ref<MenuResource[]>([]);
 
     const setActiveMenuId = (menuId: string) => {
@@ -49,12 +70,13 @@ export const useMenuStore = defineStore('menu', () => {
         // if (result.data.length !== 0) {
         //     menus.value = result.data;
         // }
-        permission.split(",").forEach(p=>{
-            
+        permission.split(",").forEach(p => {
+            const router = getRouteByPermissionKey(p);
+            router && addMenuByDirectoryPermissionKey(router);
         })
     };
     const setBreadcrumbMenus = (menuIds: string[]) => {
-        breadcrumbMenu.value = getTreesNodeByIds(menus.value, [...menuIds, activeMenuId.value],"resourceId");
+        breadcrumbMenu.value = getTreesNodeByIds(menus.value, [...menuIds, activeMenuId.value], "resourceId");
     };
-    return { menus, activeMenuId, breadcrumbMenu, setActiveMenuId,  setBreadcrumbMenus, loadUserMenus };
+    return { menus, activeMenuId, breadcrumbMenu, setActiveMenuId, setBreadcrumbMenus, loadUserMenus };
 });

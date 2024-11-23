@@ -5,7 +5,7 @@ import NProgress from 'nprogress';
 import { loadLanguageAsync, getLocale, support_locales } from "@/utils/i18n"
 import { useMenuStore } from "@/store/menu";
 import Layout from "@/layout/Layout.vue";
-
+import { USERPERMISSIONSTORAGE } from "@/router/asyncRoutes"
 
 
 
@@ -54,8 +54,7 @@ router.beforeEach(async (to, from, next) => {
     const loadUserMenus = menuStore.loadUserMenus;
 
     await loadLanguageAsync(getLocale());
-    // TODOS：根据用户的permission匹配路由，将路由加入到菜单目录中
-    await loadUserMenus(localStorage.getItem('permission') as string);
+    await loadUserMenus(localStorage.getItem(USERPERMISSIONSTORAGE) || "");
     next();
 });
 router.afterEach(() => {

@@ -15,6 +15,8 @@ export interface Resource{
     permissionKey: string,
 }
 export interface MenuResource extends Resource {
+    routerName: string,
+    routerPath: string,
     children: MenuResource[],
 }
 export interface ResourceResponse extends Resource {

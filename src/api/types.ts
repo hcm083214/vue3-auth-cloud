@@ -13,7 +13,7 @@ export interface UserInfo {
     token: string,
     roleIds: number[],
     authorizeUrl: Location,
-    permissions: number[],
+    permissions: string[],
 }
 
 export interface Count {
