@@ -60,18 +60,6 @@ const constantRoutes: RouteRecord[] = [
                     directoryPermissionKey: directoryPermissionKey.null,
                 },
                 children: [],
-            },
-            {
-                path: 'role',
-                name: 'role',
-                component: () => import('@/views/authority/role/Role.vue'),
-                meta: {
-                    title: '角色',
-                    permissionKey: pagePermissionKey.home,
-                    parentPermissionKey: pagePermissionKey.index,
-                    directoryPermissionKey: directoryPermissionKey.null,
-                },
-                children: [],
             }
         ]
     }
@@ -90,9 +78,9 @@ router.beforeEach(async (to, from, next) => {
     const addPermissions = getAddPermissions(permissions);
 
     loadRouter(addPermissions);
+    loadUserMenus(addPermissions);
     await loadLanguageAsync(getLocale());
-    await loadUserMenus(addPermissions);
-
+    
     next();
 });
 router.afterEach(() => {
@@ -107,11 +95,9 @@ function getAddPermissions(permissions: string) {
     )
 }
 function loadRouter(addPermissions: string[]) {
-    console.log("before", router.getRoutes())
     addPermissions.length > 0 && addPermissions.forEach(p => {
         updateRouter(p)
     });
-    console.log("after", router.getRoutes())
 }
 
 function updateRouter(permissionKey: string) {

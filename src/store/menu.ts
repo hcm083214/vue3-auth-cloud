@@ -86,11 +86,21 @@ export const useMenuStore = defineStore('menu', () => {
         }
         _updateMenu(directoryPermissionKey, menus.value);
     }
+    const deleteEmptyMenu = () => {
+        for (let i = menus.value.length - 1; i >= 0; i--) {
+            if (menus.value[i].children.length === 0 &&
+                menus.value[i].resourceType === ResourceTypeEnum.D
+            ) {
+                menus.value.splice(i, 1);
+            }
+        }
+    }
     const loadUserMenus = async (addPermissions: string[]) => {
         addPermissions.forEach(p => {
             const router = getRouteByPermissionKey(p);
             router && updateMenuByDirectoryPermissionKey(router);
         })
+        deleteEmptyMenu();
     };
     const setBreadcrumbMenus = (menuIds: string[]) => {
         breadcrumbMenu.value = getTreesNodeByIds(menus.value, [...menuIds, activeMenuId.value], "resourceId");
