@@ -7,9 +7,9 @@ import MenuItem from "./MenuItem.vue"
 
 
 const menuStore = useMenuStore();
-const { menus } = storeToRefs(menuStore);
+const { menus, activeMenuId } = storeToRefs(menuStore);
 
-const activeMenuIndex = ref("1")
+const activeMenuIndex = ref(activeMenuId)
 const handleMenuSelect = (key: string, keyPath: string[]) => {
     menuStore.setActiveMenuId(key);
     menuStore.setBreadcrumbMenus(keyPath);

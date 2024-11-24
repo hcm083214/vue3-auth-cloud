@@ -86,12 +86,12 @@ router.beforeEach(async (to, from, next) => {
     NProgress.start();
     const menuStore = useMenuStore();
     const loadUserMenus = menuStore.loadUserMenus;
-    const permissions = getUpdatePermissions();
-    console.log("permissions", permissions)
+    const permissions = localStorage.getItem(USERPERMISSIONSTORAGE) || "";
+    const addPermissions = getAddPermissions(permissions);
 
-    loadRouter(permissions);
+    loadRouter(addPermissions);
     await loadLanguageAsync(getLocale());
-    await loadUserMenus(permissions);
+    await loadUserMenus(addPermissions);
 
     next();
 });
@@ -100,31 +100,33 @@ router.afterEach(() => {
     NProgress.done()
 });
 
-function getUpdatePermissions() {
-    const permissions = localStorage.getItem(USERPERMISSIONSTORAGE) || "";
+function getAddPermissions(permissions: string) {
     const routes = router.getRoutes();
-    console.log("routes", routes)
     return permissions.split(",").filter(p =>
         !routes.some(route => route.meta.permissionKey === p)
     )
 }
-function loadRouter(updateRoutes: string[]) {
-    updateRoutes.length > 0 && updateRoutes.forEach(p => {
-        const route = getRouteByPermissionKey(p);
-        if (route) {
-            let parentName: RouteRecordName = "";
-            if (route.meta.parentPermissionKey === pagePermissionKey.index) {
-                parentName = "home"
-            } else {
-                const parentRoute = getRouteByPermissionKey(p);
-                parentName = parentRoute?.name || "";
-            }
-            console.log("Adding route:", route, "to parent:", parentName);
-            router.addRoute(parentName, route as RouteRecord);
-            console.log("Current routes:", router.getRoutes());
-        }
+function loadRouter(addPermissions: string[]) {
+    console.log("before", router.getRoutes())
+    addPermissions.length > 0 && addPermissions.forEach(p => {
+        updateRouter(p)
     });
+    console.log("after", router.getRoutes())
 }
 
+function updateRouter(permissionKey: string) {
+    const route = getRouteByPermissionKey(permissionKey);
+    if (route) {
+        let parentName: RouteRecordName = "";
+        if (route.meta.parentPermissionKey === pagePermissionKey.index) {
+            parentName = "index"
+        } else {
+            const parentRoute = getRouteByPermissionKey(permissionKey);
+            parentName = parentRoute?.name || "";
+        }
+        router.addRoute(parentName, route as RouteRecord);
+
+    }
+}
 export const REDIRECT_KEY = "REDIREC";
 export default router;

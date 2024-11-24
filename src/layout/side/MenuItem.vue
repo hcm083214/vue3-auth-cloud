@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { ResourceResponse } from '@/api/resource'
+import { MenuResource } from '@/api/resource'
 import { PropType } from 'vue';
 const menus = defineProps({
     menus: {
-        type: Object as PropType<ResourceResponse>,
+        type: Object as PropType<MenuResource>,
         default: () => ({})
     }
 })
