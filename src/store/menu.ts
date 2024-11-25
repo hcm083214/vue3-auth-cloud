@@ -7,9 +7,8 @@ import { getRouteByPermissionKey, RouteRecordRaw, directoryPermissionKey } from 
 
 const directoryTree: MenuResource[] = [
     {
-        resourceId: directoryPermissionKey.home,
         resourceName: "首页",
-        parentId: directoryPermissionKey.root,
+        parentPermissionKey: directoryPermissionKey.root,
         resourceType: ResourceTypeEnum.P,
         permissionKey: directoryPermissionKey.home,
         routerPath: "/",
@@ -17,18 +16,16 @@ const directoryTree: MenuResource[] = [
         children: [] as MenuResource[],
     },
     {
-        resourceId: directoryPermissionKey.systemMonitor,
         resourceName: "系统监控",
-        parentId: directoryPermissionKey.root,
+        parentPermissionKey: directoryPermissionKey.root,
         resourceType: ResourceTypeEnum.D,
         permissionKey: directoryPermissionKey.systemMonitor,
         routerPath: "",
         routerName: "",
         children: [
             {
-                resourceId: directoryPermissionKey.log,
                 resourceName: "日志管理",
-                parentId: directoryPermissionKey.systemMonitor,
+                parentPermissionKey: directoryPermissionKey.systemMonitor,
                 resourceType: ResourceTypeEnum.P,
                 permissionKey: directoryPermissionKey.log,
                 routerPath: "",
@@ -38,9 +35,8 @@ const directoryTree: MenuResource[] = [
         ],
     },
     {
-        resourceId: directoryPermissionKey.authority,
         resourceName: "权限管理",
-        parentId: directoryPermissionKey.root,
+        parentPermissionKey: directoryPermissionKey.root,
         resourceType: ResourceTypeEnum.D,
         permissionKey: directoryPermissionKey.authority,
         routerPath: "",
@@ -60,9 +56,8 @@ export const useMenuStore = defineStore('menu', () => {
     };
     const addMenu = (directory: MenuResource, routeRecord: RouteRecordRaw) => {
         directory.children.push({
-            resourceId: routeRecord.meta.permissionKey,
             resourceName: routeRecord.meta.title,
-            parentId: routeRecord.meta.directoryPermissionKey,
+            parentPermissionKey: routeRecord.meta.directoryPermissionKey,
             resourceType: ResourceTypeEnum.P,
             permissionKey: routeRecord.meta.permissionKey,
             routerPath: routeRecord.path,
@@ -96,11 +91,11 @@ export const useMenuStore = defineStore('menu', () => {
         }
     }
     const loadUserMenus = async (addPermissions: string[]) => {
+        // TODOs: get menu list from server
         addPermissions.forEach(p => {
             const router = getRouteByPermissionKey(p);
             router && updateMenuByDirectoryPermissionKey(router);
         })
-        deleteEmptyMenu();
     };
     const setBreadcrumbMenus = (menuIds: string[]) => {
         breadcrumbMenu.value = getTreesNodeByIds(menus.value, [...menuIds, activeMenuId.value], "resourceId");

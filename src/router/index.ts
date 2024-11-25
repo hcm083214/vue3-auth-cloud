@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordName } from "vue-router";
 import NProgress from 'nprogress';
 
-import { loadLanguageAsync, getLocale, support_locales } from "@/utils/i18n"
+import { loadLanguageAsync, getLocale } from "@/utils/i18n"
 import { useMenuStore } from "@/store/menu";
 import Layout from "@/layout/Layout.vue";
 import { USERPERMISSIONSTORAGE, getRouteByPermissionKey, pagePermissionKey, directoryPermissionKey } from "@/router/asyncRoutes";

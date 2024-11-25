@@ -8,11 +8,10 @@ export enum ResourceTypeEnum {
     B = "Button",
 }
 export interface Resource{
-    resourceId: string,
-    resourceName: string,
-    parentId: string,
+    resourceName: string, 
     resourceType: ResourceTypeEnum,
     permissionKey: string,
+    parentPermissionKey: string,
 }
 export interface MenuResource extends Resource {
     routerName: string,
@@ -20,8 +19,9 @@ export interface MenuResource extends Resource {
     children: MenuResource[],
 }
 export interface ResourceResponse extends Resource {
-    resourcePath: string,
-    routerName: string,
+    resourceId: string,
+    parentId: string,
+    resourcePath?: string,
     orderNum?: number,
     children: ResourceResponse[],
 }
