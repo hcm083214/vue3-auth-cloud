@@ -10,11 +10,11 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    tableList: {
+    tableData: {
         type: Array,
         default: () => ([]),
     },
-    tableHeaderConfig: {
+    tableColumnProps: {
         type: Object as PropType<TableHeaderOption[]>,
         default: () => ([{
             label: '',
@@ -22,7 +22,7 @@ const props = defineProps({
             width: 120,
         }])
     },
-    customizeTableHeaderConfig: {
+    customizeTableColumnProps: {
         type: Object as PropType<TableHeaderOption[]>,
         default: () => ([])
     }
@@ -33,11 +33,11 @@ const tableHandler = (mode: TableOperationOption, rawData: any) => {
 }
 </script>
 <template>
-    <el-table v-loading="props.isLoading" :data="props.tableList">
+    <el-table v-loading="props.isLoading" :data="props.tableData">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column :label="rows.label" :prop="rows.prop" :width="rows.width"
-            v-for="rows in props.tableHeaderConfig" :key="rows.label" />
-        <el-table-column v-for="rows in props.customizeTableHeaderConfig" :key="rows.label" :label="rows.label"
+            v-for="rows in props.tableColumnProps" :key="rows.label" />
+        <el-table-column v-for="rows in props.customizeTableColumnProps" :key="rows.label" :label="rows.label"
             :prop="rows.prop" :width="rows.width">
             <template #default="scope">
                 <slot :name="rows.prop" :scope="scope.row"></slot>

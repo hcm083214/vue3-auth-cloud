@@ -51,7 +51,7 @@ import SideBar from "@/layout/side/SideBar.vue";
         .app-main {
             box-sizing: border-box;
             width: 100%;
-            padding: 5px;
+            padding: 10px 5px;
             overflow-y: scroll;
             height: calc(100% - var(--base-header-height));
         }

@@ -28,9 +28,9 @@
                 <el-button type="text" @click="tableHandleEventObj.handleDelete()">{{ $t('common.delete') }}</el-button>
             </template>
         </co-table-operation>
-        <co-table :tableList="tableData.i18nList" :isLoading="tableData.isLoading"
-            :tableHeaderConfig="tableData.headerConfig"
-            :customizeTableHeaderConfig="tableData.customizeTableHeaderConfig" @tableHandler="tableHandler">
+        <co-table :table-data="tableData.i18nList" :isLoading="tableData.isLoading"
+            :table-column-props="tableData.headerConfig"
+            :customize-table-column-props="tableData.customizeTableHeaderConfig" @tableHandler="tableHandler">
             <template #createTime="tableData">
                 <span>{{ dataFormat(tableData.createTime, "YYYY/MM/DD HH:mm:ss") }}</span>
             </template>

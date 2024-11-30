@@ -43,6 +43,11 @@ export interface Page<T> {
     records: T[] // 查询数据列表
 }
 
+export interface PageParams {
+    current: Number,
+    size: Number,
+}
+
 export interface FunctionList {
     functionId: number,
     functionNameCn: string,

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { h, defineComponent, PropType, onMounted, computed } from "vue";
+import { PropType, computed } from "vue";
 import { ElRow, ElCol, ElButton } from 'element-plus'
 
-import { TableOperation,tableOperationMap } from "./table";
+import { TableOperation, tableOperationMap } from "./table";
 import Icon from "@/components/Icon.vue";
 import { $t } from "@/utils/i18n";
 
@@ -27,9 +27,8 @@ const tableOperationMapWithSelection = computed(() => {
 <template>
     <el-row :gutter="10">
         <el-col :span="1.5" v-for="tableOperation in tableOperationMapWithSelection" :key="tableOperation.operation">
-            <el-button :type="tableOperation.type" 
-                @click="tableOperationHandler(tableOperation.operation)">
-                <icon :icon="tableOperation.icon" color="#fff"/> {{ $t(tableOperation.label) }}
+            <el-button :type="tableOperation.type" @click="tableOperationHandler(tableOperation.operation)">
+                <icon :icon="tableOperation.icon" color="#fff" /> {{ $t(tableOperation.label) }}
             </el-button>
         </el-col>
     </el-row>

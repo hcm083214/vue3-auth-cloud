@@ -1,6 +1,6 @@
 import service from "@/utils/request";
 import { support_locales } from "@/utils/i18n";
-import { Page } from "@/api/types";
+import { Page,PageParams } from "@/api/types";
 
 export interface i18nParams {
     // 语言环境
@@ -18,10 +18,7 @@ export interface i18nResponse {
     i18nValue:string,
     createTime?:Date,
 }
-interface PageParams {
-    current: Number,
-    size: Number,
-}
+
 
 export type searchI18nListParams = i18nParams & PageParams
 

@@ -1,13 +1,32 @@
-<template>
-    <div>
-        <el-table :data="tableData" style="width: 100%; margin-bottom: 20px" row-key="id" border default-expand-all>
-            <el-table-column prop="date" label="Date" sortable />
-            <el-table-column prop="name" label="Name" sortable />
-            <el-table-column prop="address" label="Address" sortable />
-        </el-table>
-    </div>
-</template>
 <script lang="ts" setup>
+import { onMounted, reactive } from "vue";
+
+import CommonTable from "@/components/table/CoTable.vue";
+import CoTableOperation from "@/components/table/CoTableOperation.vue";
+import { getSystemResourceApi, ResourceResponse } from "@/api/resource";
+
+
+const resourceDate = reactive({
+    isLoading: false,
+    data: [] as ResourceResponse[]
+})
+
+onMounted(async () => {
+    resourceDate.isLoading = true;
+    const result = await getSystemResourceApi();
+    if(result.code = 200){
+        resourceDate.data = result.data.records;
+    }
+    resourceDate.isLoading = false;
+})
 
 </script>
-<style lang="scss"></style>
+
+<template>
+    <div class="resource-container">
+        <co-table-operation :tableOperation='["Add", "Export", "Import"]' />
+        <common-table :tableData="resourceDate.data" :isLoading="resourceDate.isLoading" />
+    </div>
+</template>
+
+<style lang="scss" scoped></style>

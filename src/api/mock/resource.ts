@@ -1,4 +1,5 @@
 import Mock from "mockjs";
+import { mockPageData } from './utils';
 
 const router = [
     {
@@ -68,4 +69,18 @@ Mock.mock(RegExp("/mock/resource/menus" + ".*"), "get", () => {
         msg: "success",
         data: router,
     })
+})
+
+Mock.mock(RegExp("/mock/resource" + ".*"), "get", (options) => {
+    const ResourceTypeEnum = ["D", "P", "B"]
+    return mockPageData(options, (Random) => ({
+        resourceName: Random.string(4, 8),
+        resourceType: ResourceTypeEnum[Random.natural(0, 2)],
+        permissionKey: Random.string(3, 15),
+        parentPermissionKey: Random.string(3, 15),
+        resourceId: Random.increment(),
+        parentId: Random.increment(),
+        resourcePath: Random.url(),
+        orderNum: Random.increment(),
+    }))
 })

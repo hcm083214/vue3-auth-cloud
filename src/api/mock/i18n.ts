@@ -156,16 +156,12 @@ Mock.mock({
 import Mock from "mockjs";
 
 
-import { SUPPORT_LOCALES_LIST, support_locales } from "@/utils/i18n";
-import { getPathQuery } from "@/utils/index";
-import { mockRandomGenerator as Random, mockData } from './utils';
+import { SUPPORT_LOCALES_LIST } from "@/utils/i18n";
+import { mockPageData } from './utils';
+
 Mock.mock(RegExp("/mock/language/list" + ".*"), "get", (options) => {
-    const queryObj = getPathQuery(options.url);
-    const size = +queryObj.size || 10;
-    const current = +queryObj.current || 1;
-    const minTotal = size * current;
-    const total = Random.natural(minTotal,Random.natural(minTotal, minTotal+1000));
-    const responseList = mockData(size, (Random) => ({
+
+    return mockPageData(options, (Random) => ({
         "i18nId": 1,
         "locale": SUPPORT_LOCALES_LIST[Random.natural(0, 1)],
         "i18nModule": Random.string(Random.natural(1, 3), Random.natural(4, 8)),
@@ -173,16 +169,4 @@ Mock.mock(RegExp("/mock/language/list" + ".*"), "get", (options) => {
         "i18nValue": Random.string(Random.natural(1, 3), Random.natural(4, 8)),
         "createTime": Random.datetime(),
     }))
-
-    return Mock.mock({
-        code: 200,
-        msg: "success",
-        data: {
-            total, // 查询列表总记录数
-            current, // 当前页
-            size, // 每页显示条数
-            pages: Math.ceil(total / size), // 总页数
-            records: responseList // 查询数据列表
-        }
-    })
 })
